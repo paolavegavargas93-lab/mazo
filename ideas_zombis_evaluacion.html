@@ -1,0 +1,435 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ideas Zombis de la Evaluación</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Creepster&family=Special+Elite&family=Nunito:wght@400;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#0a0807;
+    --card:#16110f;
+    --paper:#efe4cc;
+    --text:#e8dcc4;
+    --muted:#b9a98c;
+    --blood:#9e0d0d;
+    --blood2:#d11a1a;
+    --toxic:#9fdc5a;
+    --line:rgba(158,13,13,.55);
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{
+    background:
+      radial-gradient(ellipse at 50% -10%, rgba(120,10,10,.45), transparent 55%),
+      radial-gradient(ellipse at 50% 120%, rgba(60,90,30,.25), transparent 60%),
+      var(--bg);
+    color:var(--text);
+    font-family:'Nunito',system-ui,sans-serif;
+    min-height:100vh;
+    padding:28px 16px 40px;
+    overflow-x:hidden;
+  }
+  /* Niebla */
+  .fog{position:fixed;inset:0;pointer-events:none;z-index:0;opacity:.35;
+    background:
+      radial-gradient(ellipse 40% 18% at 20% 80%, rgba(200,200,190,.25), transparent 70%),
+      radial-gradient(ellipse 35% 15% at 75% 70%, rgba(200,200,190,.2), transparent 70%),
+      radial-gradient(ellipse 30% 12% at 50% 95%, rgba(200,200,190,.25), transparent 70%);
+    animation:fog 18s ease-in-out infinite alternate;}
+  @keyframes fog{from{transform:translateX(-6%)}to{transform:translateX(6%)}}
+
+  header{position:relative;z-index:1;text-align:center;margin-bottom:26px}
+  h1{
+    font-family:'Creepster',cursive;font-weight:400;
+    font-size:clamp(2.2rem,6vw,4rem);letter-spacing:3px;
+    color:var(--blood2);
+    text-shadow:0 0 12px rgba(209,26,26,.6),0 4px 0 #3a0000;
+    animation:flicker 5s infinite;
+  }
+  @keyframes flicker{
+    0%,18%,22%,25%,53%,57%,100%{opacity:1}
+    20%,24%,55%{opacity:.35}
+  }
+  .sub{font-family:'Special Elite',monospace;color:var(--muted);font-size:clamp(.9rem,2vw,1.1rem);margin-top:6px}
+  .sub b{color:var(--toxic)}
+
+  .grid{
+    position:relative;z-index:1;
+    display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:26px;
+    max-width:1200px;margin:0 auto;
+  }
+  .card{
+    position:relative;
+    background:
+      radial-gradient(circle at 85% 90%, rgba(158,13,13,.18), transparent 40%),
+      repeating-linear-gradient(0deg, rgba(255,255,255,.012) 0 2px, transparent 2px 4px),
+      var(--card);
+    border:3px solid var(--blood);
+    border-radius:14px;
+    padding:30px 18px 18px;
+    box-shadow:0 0 0 1px #000,0 0 22px rgba(158,13,13,.35), inset 0 0 40px rgba(0,0,0,.7);
+    transition:transform .25s;
+  }
+  .card:hover{animation:shake .4s}
+  @keyframes shake{
+    0%,100%{transform:translate(0,0) rotate(0)}
+    25%{transform:translate(-2px,1px) rotate(-.4deg)}
+    50%{transform:translate(2px,-1px) rotate(.4deg)}
+    75%{transform:translate(-1px,1px) rotate(-.2deg)}
+  }
+  .drip{position:absolute;top:-1px;left:0;width:100%;height:30px;pointer-events:none}
+  .tag{
+    position:absolute;top:-14px;right:18px;
+    background:var(--blood);color:#fff;
+    font-family:'Special Elite',monospace;font-size:.78rem;letter-spacing:1px;
+    padding:4px 10px;border-radius:4px;transform:rotate(3deg);
+    box-shadow:0 2px 6px rgba(0,0,0,.6);
+  }
+  .name{
+    font-family:'Creepster',cursive;font-weight:400;
+    font-size:clamp(1.45rem,2.6vw,1.95rem);letter-spacing:1.5px;line-height:1.1;
+    color:var(--toxic);
+    text-shadow:0 0 10px rgba(159,220,90,.35),0 2px 0 #1b2a0c;
+    padding-bottom:10px;margin-bottom:14px;
+    border-bottom:2px dashed var(--line);
+  }
+  .name small{display:block;font-family:'Special Elite',monospace;font-size:.75rem;color:var(--muted);letter-spacing:2px;text-shadow:none;margin-bottom:4px}
+  .body{display:grid;grid-template-columns:42% 1fr;gap:16px;align-items:start}
+  .art{
+    border:2px solid #3b2a20;border-radius:10px;overflow:hidden;
+    background:#0d0b14;box-shadow:inset 0 0 20px #000,0 0 12px rgba(0,0,0,.6);
+    aspect-ratio:200/260;
+  }
+  .art svg{display:block;width:100%;height:100%}
+  .fields{display:flex;flex-direction:column;gap:10px}
+  .field{border-bottom:1px dashed rgba(185,169,140,.3);padding-bottom:8px}
+  .field:last-child{border-bottom:none}
+  .label{
+    font-family:'Special Elite',monospace;font-size:.82rem;letter-spacing:1px;
+    text-transform:uppercase;color:var(--blood2);margin-bottom:2px;
+    display:flex;align-items:center;gap:6px;
+  }
+  .field p{font-size:.95rem;line-height:1.35;color:var(--text)}
+  .field.antidote .label{color:var(--toxic)}
+  .field.antidote p{color:#d9f2bd}
+
+  footer{position:relative;z-index:1;text-align:center;margin-top:30px;font-family:'Special Elite',monospace;color:#6f6250;font-size:.85rem}
+
+  @media (max-width:860px){
+    .grid{grid-template-columns:1fr}
+  }
+  @media (max-width:480px){
+    .body{grid-template-columns:1fr}
+    .art{max-width:240px;margin:0 auto}
+  }
+  @media (prefers-reduced-motion:reduce){
+    h1,.fog,.card:hover{animation:none}
+  }
+  @media print{
+    @page{size:landscape;margin:8mm}
+    *{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+    body{padding:6px}
+    .fog{display:none}
+    h1{animation:none;font-size:2rem}
+    header{margin-bottom:10px}
+    .grid{grid-template-columns:repeat(2,1fr);gap:12px}
+    .card{break-inside:avoid;padding:24px 12px 12px}
+    .field p{font-size:.8rem}
+    footer{display:none}
+  }
+</style>
+</head>
+<body>
+<div class="fog"></div>
+
+<!-- ===== Piezas SVG reutilizables ===== -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <radialGradient id="sky" cx="70%" cy="20%" r="90%">
+      <stop offset="0" stop-color="#3b2a4a"/>
+      <stop offset=".55" stop-color="#171026"/>
+      <stop offset="1" stop-color="#07060c"/>
+    </radialGradient>
+    <radialGradient id="moonGlow">
+      <stop offset="0" stop-color="#fff3c4" stop-opacity=".55"/>
+      <stop offset="1" stop-color="#fff3c4" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="skin" cx="40%" cy="35%" r="70%">
+      <stop offset="0" stop-color="#a9c48d"/>
+      <stop offset="1" stop-color="#6c8757"/>
+    </radialGradient>
+
+    <!-- Escenario: luna, cementerio, árbol -->
+    <symbol id="scene" viewBox="0 0 200 260">
+      <rect width="200" height="260" fill="url(#sky)"/>
+      <circle cx="152" cy="42" r="40" fill="url(#moonGlow)"/>
+      <circle cx="152" cy="42" r="22" fill="#f1e8c3"/>
+      <circle cx="145" cy="36" r="4" fill="#d8cda2"/><circle cx="158" cy="48" r="3" fill="#d8cda2"/>
+      <!-- murciélagos -->
+      <path d="M40 40 q4 -5 8 0 q4 -5 8 0 q-4 -1 -8 3 q-4 -4 -8 -3z" fill="#000"/>
+      <path d="M110 22 q3 -4 6 0 q3 -4 6 0 q-3 -1 -6 2 q-3 -3 -6 -2z" fill="#000"/>
+      <!-- árbol seco -->
+      <path d="M6 230 L12 150 L4 120 M12 150 L22 118 L34 108 M18 128 L8 104 M22 118 L26 96" stroke="#0b0a0a" stroke-width="5" fill="none" stroke-linecap="round"/>
+      <!-- lápidas -->
+      <path d="M150 230 v-38 q0 -14 14 -14 q14 0 14 14 v38z" fill="#2e2c33" stroke="#111" stroke-width="2"/>
+      <text x="164" y="206" font-size="9" text-anchor="middle" fill="#6d6a75" font-family="serif">R.I.P</text>
+      <path d="M30 232 v-26 q0 -10 10 -10 q10 0 10 10 v26z" fill="#262429" stroke="#111" stroke-width="2"/>
+      <rect x="182" y="196" width="4" height="30" fill="#2a282e"/><rect x="176" y="204" width="16" height="4" fill="#2a282e"/>
+    </symbol>
+
+    <!-- Zombi saliendo de la tumba (sin accesorios) -->
+    <symbol id="zombie" viewBox="0 0 200 260">
+      <!-- brazos -->
+      <path d="M78 160 Q52 150 34 122" stroke="#738f5e" stroke-width="13" stroke-linecap="round" fill="none"/>
+      <path d="M122 160 Q148 150 166 122" stroke="#738f5e" stroke-width="13" stroke-linecap="round" fill="none"/>
+      <!-- dedos -->
+      <g stroke="#738f5e" stroke-width="4" stroke-linecap="round">
+        <path d="M34 122 l-8 -8 M34 122 l-3 -12 M34 122 l3 -11 M34 122 l-10 -2"/>
+        <path d="M166 122 l8 -8 M166 122 l3 -12 M166 122 l-3 -11 M166 122 l10 -2"/>
+      </g>
+      <!-- mangas rasgadas -->
+      <path d="M82 150 Q66 148 56 138 L50 146 L58 150 L54 156 Q70 164 82 166z" style="fill:var(--shirt)"/>
+      <path d="M118 150 Q134 148 144 138 L150 146 L142 150 L146 156 Q130 164 118 166z" style="fill:var(--shirt)"/>
+      <!-- torso -->
+      <path d="M68 150 Q100 136 132 150 L138 236 L62 236z" style="fill:var(--shirt)"/>
+      <path d="M68 150 Q100 136 132 150 L134 170 Q100 160 66 170z" fill="#000" opacity=".18"/>
+      <!-- rasgaduras y sangre -->
+      <path d="M84 176 l8 10 l-6 6 l10 8 l-12 -2 z" fill="#5b7348"/>
+      <path d="M112 192 l10 4 l-4 8 l8 6 l-14 -4z" fill="#5b7348"/>
+      <circle cx="118" cy="174" r="6" fill="#7a0a0a" opacity=".85"/>
+      <path d="M118 178 v12" stroke="#7a0a0a" stroke-width="3" stroke-linecap="round"/>
+      <!-- cuello -->
+      <rect x="91" y="126" width="18" height="20" fill="#6f8a5b"/>
+      <!-- cabeza -->
+      <ellipse cx="100" cy="100" rx="34" ry="38" fill="url(#skin)"/>
+      <!-- oreja rota -->
+      <path d="M66 100 q-8 -2 -7 8 q2 8 9 6z" fill="#7f9a69"/>
+      <path d="M134 98 q8 -2 8 6 l-4 2 l3 4 q-3 4 -8 2z" fill="#7f9a69"/>
+      <!-- pelo -->
+      <path d="M68 86 Q70 60 98 60 Q128 58 133 84 L128 76 L124 86 L118 72 L112 82 L104 68 L98 80 L90 68 L86 82 L78 72 L76 88z" fill="#1d1a14"/>
+      <!-- puntos de sutura -->
+      <path d="M78 84 L104 76" stroke="#2b2b20" stroke-width="2"/>
+      <g stroke="#2b2b20" stroke-width="1.6">
+        <path d="M82 79 l2 8 M88 77 l2 8 M94 75 l2 8 M100 74 l2 8"/>
+      </g>
+      <!-- cuencas -->
+      <ellipse cx="86" cy="100" rx="11" ry="10" fill="#3a4a30"/>
+      <ellipse cx="115" cy="103" rx="10" ry="9" fill="#3a4a30"/>
+      <!-- ojos -->
+      <g class="eyes">
+        <circle cx="86" cy="100" r="8" fill="#f4f1d8"/>
+        <circle cx="88" cy="102" r="3" fill="#c10f0f"/>
+        <path d="M107 103 q8 -6 16 0 q-8 6 -16 0z" fill="#e8e3c4"/>
+        <circle cx="114" cy="104" r="2.4" fill="#c10f0f"/>
+      </g>
+      <!-- cejas -->
+      <path d="M75 88 l20 6" stroke="#1d1a14" stroke-width="3" stroke-linecap="round"/>
+      <path d="M126 92 l-18 4" stroke="#1d1a14" stroke-width="3" stroke-linecap="round"/>
+      <!-- nariz -->
+      <circle cx="98" cy="113" r="1.8" fill="#2f3c27"/><circle cx="104" cy="113" r="1.8" fill="#2f3c27"/>
+      <!-- herida en mejilla -->
+      <path d="M120 116 q6 -2 8 4 q-4 6 -9 2z" fill="#8e1a1a"/>
+      <!-- boca -->
+      <path d="M84 122 Q100 116 118 124 Q112 136 100 136 Q88 135 84 122z" fill="#2a0f0f"/>
+      <path d="M88 122 l3 5 l3 -5 l3 5 l3 -5 l3 5 l3 -5 l3 5 l3 -4" fill="#efe9cf"/>
+      <path d="M92 134 l3 -4 l3 4 M104 135 l3 -4 l3 3" fill="#efe9cf" stroke="#efe9cf" stroke-width="1"/>
+      <!-- baba de sangre -->
+      <path d="M96 135 q1 8 -1 12 q-2 -4 -1 -12z" fill="#a10f0f"/>
+    </symbol>
+
+    <!-- Tierra en primer plano -->
+    <symbol id="dirt" viewBox="0 0 200 260">
+      <path d="M0 226 Q30 212 60 222 Q86 206 112 220 Q140 208 166 222 Q186 214 200 222 L200 260 L0 260z" fill="#2a1c13"/>
+      <path d="M0 240 Q50 230 100 240 Q150 232 200 242 L200 260 L0 260z" fill="#1c120c"/>
+      <circle cx="40" cy="236" r="4" fill="#3e2b1e"/><circle cx="130" cy="232" r="5" fill="#3e2b1e"/>
+      <circle cx="172" cy="244" r="3" fill="#3e2b1e"/><circle cx="76" cy="248" r="3" fill="#3e2b1e"/>
+      <path d="M90 246 l6 -4 l4 4 l6 -3" stroke="#d9d2bb" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+    </symbol>
+
+    <symbol id="dripStrip" viewBox="0 0 400 36" preserveAspectRatio="none">
+      <path d="M0 0H400V6C380 6 378 8 376 14C374 26 368 26 368 14C368 8 360 6 330 6C300 6 298 8 297 18C296 30 288 30 288 18C288 8 280 6 240 6C200 6 196 8 195 12C194 20 189 20 189 12C189 8 180 6 140 6C110 6 106 8 105 20C104 34 95 34 95 20C95 8 90 6 60 6C40 6 36 8 35 13C34 22 28 22 28 13C28 8 20 6 0 6Z" fill="#9e0d0d"/>
+    </symbol>
+  </defs>
+</svg>
+
+<header>
+  <h1>Ideas Zombis de la Evaluación</h1>
+  <p class="sub">Creencias que <b>murieron</b> en la teoría… pero siguen <b>caminando</b> en el aula</p>
+</header>
+
+<main class="grid">
+
+  <!-- ===== CARTA 1 ===== -->
+  <article class="card">
+    <svg class="drip"><use href="#dripStrip"/></svg>
+    <span class="tag">IDEA ZOMBI #1</span>
+    <h2 class="name"><small>NOMBRE</small>Evaluar es calificar</h2>
+    <div class="body">
+      <div class="art">
+        <svg viewBox="0 0 200 260" role="img" aria-label="Zombi que sale de la tumba sosteniendo una hoja con la nota 1.0 y un bolígrafo rojo">
+          <use href="#scene"/>
+          <use href="#zombie" style="--shirt:#4a3b5c"/>
+          <use href="#dirt"/>
+          <!-- planilla de notas -->
+          <g transform="rotate(10 172 86)">
+            <rect x="150" y="56" width="46" height="58" rx="2" fill="#efe4cc" stroke="#6b5a40"/>
+            <text x="173" y="68" font-size="7" text-anchor="middle" fill="#3a2e20" font-family="monospace">NOTA FINAL</text>
+            <line x1="156" y1="72" x2="190" y2="72" stroke="#b9a98c"/>
+            <text x="173" y="98" font-size="22" text-anchor="middle" fill="#c10f0f" font-family="Creepster, Impact, sans-serif">1.0</text>
+            <circle cx="173" cy="91" r="16" fill="none" stroke="#c10f0f" stroke-width="2" opacity=".7"/>
+            <path d="M184 112 v8" stroke="#c10f0f" stroke-width="2.5" stroke-linecap="round"/>
+          </g>
+          <!-- bolígrafo rojo -->
+          <g transform="rotate(-35 30 110)">
+            <rect x="24" y="84" width="8" height="40" rx="2" fill="#c10f0f"/>
+            <path d="M24 124 l4 9 l4 -9z" fill="#e8dcc4"/>
+            <rect x="24" y="84" width="8" height="6" fill="#600"/>
+          </g>
+        </svg>
+      </div>
+      <div class="fields">
+        <div class="field"><div class="label">🏚️ Hábitat en Colombia</div><p>Prácticas evaluativas tradicionales en el SIE.</p></div>
+        <div class="field"><div class="label">⚡ Poder especial</div><p>Para el docente: poder. Para el estudiante: aprobar sin aprender.</p></div>
+        <div class="field"><div class="label">💀 Debilidad</div><p>El estudiante entiende la evaluación como una sola nota al final. Presión por cumplir indicadores.</p></div>
+        <div class="field antidote"><div class="label">💉 Antídoto</div><p>Evaluación formativa y de proceso; quitar la presión de la nota.</p></div>
+      </div>
+    </div>
+  </article>
+
+  <!-- ===== CARTA 2 ===== -->
+  <article class="card">
+    <svg class="drip"><use href="#dripStrip"/></svg>
+    <span class="tag">IDEA ZOMBI #2</span>
+    <h2 class="name"><small>NOMBRE</small>Evaluar es tomar examen</h2>
+    <div class="body">
+      <div class="art">
+        <svg viewBox="0 0 200 260" role="img" aria-label="Zombi que sostiene una hoja de examen de selección múltiple y un reloj">
+          <use href="#scene"/>
+          <use href="#zombie" style="--shirt:#5c3b2e"/>
+          <use href="#dirt"/>
+          <!-- hojas de examen enterradas -->
+          <g transform="rotate(-8 60 236)">
+            <rect x="44" y="222" width="34" height="22" fill="#d9ceb2" stroke="#6b5a40"/>
+            <path d="M48 228h24M48 233h20M48 238h22" stroke="#8a7a60"/>
+          </g>
+          <!-- hoja de respuestas -->
+          <g transform="rotate(-10 24 84)">
+            <rect x="2" y="52" width="46" height="62" rx="2" fill="#efe4cc" stroke="#6b5a40"/>
+            <text x="25" y="63" font-size="8" text-anchor="middle" fill="#3a2e20" font-family="monospace" font-weight="bold">EXAMEN</text>
+            <g fill="none" stroke="#3a2e20" stroke-width=".8">
+              <circle cx="12" cy="72" r="3"/><circle cx="21" cy="72" r="3"/><circle cx="30" cy="72" r="3"/><circle cx="39" cy="72" r="3"/>
+              <circle cx="12" cy="82" r="3"/><circle cx="21" cy="82" r="3"/><circle cx="30" cy="82" r="3"/><circle cx="39" cy="82" r="3"/>
+              <circle cx="12" cy="92" r="3"/><circle cx="21" cy="92" r="3"/><circle cx="30" cy="92" r="3"/><circle cx="39" cy="92" r="3"/>
+              <circle cx="12" cy="102" r="3"/><circle cx="21" cy="102" r="3"/><circle cx="30" cy="102" r="3"/><circle cx="39" cy="102" r="3"/>
+            </g>
+            <circle cx="21" cy="72" r="3" fill="#1a1a1a"/><circle cx="39" cy="82" r="3" fill="#1a1a1a"/>
+            <circle cx="12" cy="92" r="3" fill="#1a1a1a"/><circle cx="30" cy="102" r="3" fill="#1a1a1a"/>
+            <path d="M6 112 q10 -6 18 2 q10 6 20 -2" stroke="#9e0d0d" stroke-width="2" fill="none"/>
+          </g>
+          <!-- reloj -->
+          <g>
+            <circle cx="176" cy="96" r="17" fill="#efe4cc" stroke="#3a2e20" stroke-width="3"/>
+            <path d="M176 96 V84 M176 96 L185 101" stroke="#9e0d0d" stroke-width="2.5" stroke-linecap="round"/>
+            <rect x="172" y="74" width="8" height="5" fill="#3a2e20"/>
+            <text x="176" y="125" font-size="7" text-anchor="middle" fill="#ff5a5a" font-family="monospace">¡TIEMPO!</text>
+          </g>
+        </svg>
+      </div>
+      <div class="fields">
+        <div class="field"><div class="label">🏚️ Hábitat en Colombia</div><p>Evaluaciones estandarizadas: Saber y PISA.</p></div>
+        <div class="field"><div class="label">⚡ Poder especial</div><p>Desmotiva al estudiante y presiona al docente para obtener buenos resultados.</p></div>
+        <div class="field"><div class="label">💀 Debilidad</div><p>Las pruebas del aula no están alineadas con las externas, y no tienen en cuenta el contexto ni el proceso.</p></div>
+        <div class="field antidote"><div class="label">💉 Antídoto</div><p>Diversificar el examen y tener en cuenta otros factores.</p></div>
+      </div>
+    </div>
+  </article>
+
+  <!-- ===== CARTA 3 ===== -->
+  <article class="card">
+    <svg class="drip"><use href="#dripStrip"/></svg>
+    <span class="tag">IDEA ZOMBI #3</span>
+    <h2 class="name"><small>NOMBRE</small>La evaluación es objetiva y neutral</h2>
+    <div class="body">
+      <div class="art">
+        <svg viewBox="0 0 200 260" role="img" aria-label="Zombi con los ojos vendados sosteniendo una balanza desequilibrada">
+          <use href="#scene"/>
+          <use href="#zombie" style="--shirt:#2f4a52"/>
+          <use href="#dirt"/>
+          <!-- venda en los ojos -->
+          <path d="M66 92 Q100 84 134 96 L134 110 Q100 98 66 106z" fill="#d8cfb6" stroke="#6b5a40"/>
+          <path d="M66 100 l-10 8 l4 2 M66 100 l-8 14" stroke="#d8cfb6" stroke-width="4" stroke-linecap="round"/>
+          <circle cx="90" cy="98" r="3" fill="#9e0d0d" opacity=".6"/>
+          <!-- balanza desequilibrada -->
+          <g>
+            <rect x="171" y="70" width="4" height="56" fill="#b08d3c"/>
+            <circle cx="173" cy="68" r="4" fill="#d4af5a"/>
+            <g transform="rotate(-22 173 70)">
+              <rect x="143" y="68" width="60" height="4" fill="#d4af5a"/>
+              <path d="M146 72 l-8 24 M146 72 l8 24" stroke="#b08d3c"/>
+              <path d="M200 72 l-8 24 M200 72 l8 24" stroke="#b08d3c"/>
+              <path d="M134 96 h24 q-2 8 -12 8 q-10 0 -12 -8z" fill="#d4af5a"/>
+              <path d="M188 96 h24 q-2 8 -12 8 q-10 0 -12 -8z" fill="#d4af5a"/>
+              <rect x="138" y="84" width="16" height="12" fill="#3a2e20"/>
+              <text x="146" y="93" font-size="6" text-anchor="middle" fill="#efe4cc" font-family="monospace">SABER</text>
+            </g>
+          </g>
+          <!-- regla rota -->
+          <g transform="rotate(28 26 100)">
+            <rect x="4" y="96" width="46" height="9" fill="#d9c58f" stroke="#6b5a40"/>
+            <path d="M10 96v4M16 96v3M22 96v4M28 96v3M34 96v4M40 96v3" stroke="#3a2e20"/>
+            <path d="M50 96 l-4 4 l4 5" fill="#16110f"/>
+          </g>
+        </svg>
+      </div>
+      <div class="fields">
+        <div class="field"><div class="label">🏚️ Hábitat en Colombia</div><p>Solo las pruebas estandarizadas, aunque no son criterio de promoción.</p></div>
+        <div class="field"><div class="label">⚡ Poder especial</div><p>Discriminar.</p></div>
+        <div class="field"><div class="label">💀 Debilidad</div><p>Desconoce las realidades y los estilos de aprendizaje.</p></div>
+        <div class="field antidote"><div class="label">💉 Antídoto</div><p>Partir de la realidad y aplicar el conocimiento al contexto.</p></div>
+      </div>
+    </div>
+  </article>
+
+  <!-- ===== CARTA 4 ===== -->
+  <article class="card">
+    <svg class="drip"><use href="#dripStrip"/></svg>
+    <span class="tag">IDEA ZOMBI #4</span>
+    <h2 class="name"><small>NOMBRE</small>El error debe penalizarse</h2>
+    <div class="body">
+      <div class="art">
+        <svg viewBox="0 0 200 260" role="img" aria-label="Zombi que levanta un cartel con una gran X roja y un menos cinco">
+          <use href="#scene"/>
+          <use href="#zombie" style="--shirt:#5a2a2a"/>
+          <use href="#dirt"/>
+          <!-- cartel con X -->
+          <g transform="rotate(8 170 80)">
+            <rect x="166" y="96" width="5" height="30" fill="#4a3220"/>
+            <rect x="144" y="44" width="52" height="54" rx="3" fill="#efe4cc" stroke="#4a3220" stroke-width="2"/>
+            <path d="M154 54 L186 86 M186 54 L154 86" stroke="#c10f0f" stroke-width="7" stroke-linecap="round"/>
+            <path d="M160 86 v10 M180 80 v14" stroke="#c10f0f" stroke-width="2.5" stroke-linecap="round"/>
+          </g>
+          <!-- -5 -->
+          <g transform="rotate(-14 26 80)">
+            <rect x="2" y="60" width="46" height="34" rx="3" fill="#efe4cc" stroke="#4a3220" stroke-width="2"/>
+            <text x="25" y="86" font-size="22" text-anchor="middle" fill="#c10f0f" font-family="Creepster, Impact, sans-serif">-5</text>
+            <path d="M14 94 v8 M34 94 v12" stroke="#c10f0f" stroke-width="2.5" stroke-linecap="round"/>
+          </g>
+          <!-- charco de sangre -->
+          <ellipse cx="100" cy="238" rx="26" ry="5" fill="#6b0707" opacity=".8"/>
+        </svg>
+      </div>
+      <div class="fields">
+        <div class="field"><div class="label">🏚️ Hábitat en Colombia</div><p>Bajo rendimiento académico.</p></div>
+        <div class="field"><div class="label">⚡ Poder especial</div><p>Lleva al estudiante incluso a hacer trampa para no cometer errores.</p></div>
+        <div class="field"><div class="label">💀 Debilidad</div><p>No fortalece el aprendizaje.</p></div>
+        <div class="field antidote"><div class="label">💉 Antídoto</div><p>Naturalizar el error y aprender de él.</p></div>
+      </div>
+    </div>
+  </article>
+
+</main>
+
+<footer>⚰️ Que ninguna de estas ideas salga de la tumba en tu aula ⚰️</footer>
+</body>
+</html>
